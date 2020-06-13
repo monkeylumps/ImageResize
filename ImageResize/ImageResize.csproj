@@ -5,11 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\01_04_2019_001103.png" />
     <None Remove="readme.md" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\01_04_2019_001103.png" />
     <EmbeddedResource Include="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="MediatR" Version="8.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\01_04_2019_001103.png" />
   </ItemGroup>
 
 

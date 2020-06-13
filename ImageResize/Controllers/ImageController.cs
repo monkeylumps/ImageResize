@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using ImageResize.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ImageResize.Controllers
@@ -7,11 +12,6 @@ namespace ImageResize.Controllers
     [Route("[controller]")]
     public class ImageController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<ImageController> _logger;
 
         public ImageController(ILogger<ImageController> logger)
@@ -19,17 +19,27 @@ namespace ImageResize.Controllers
             _logger = logger;
         }
 
-        //[HttpGet]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    var rng = new Random();
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateTime.Now.AddDays(index),
-        //        TemperatureC = rng.Next(-20, 55),
-        //        Summary = Summaries[rng.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Get(string resolution, string backgroundColour, string watermark, string imageFileType)
+        {
+            if(string.IsNullOrEmpty(resolution) || !Enum.TryParse(resolution, out Resolution resolutionEnum))
+            {
+                return BadRequest($"invalid resolution provided - ${resolution}");
+            }
+
+            if(!string.IsNullOrEmpty(backgroundColour) && !Enum.TryParse(backgroundColour, out BackgroundColour backgroundColourEnum))
+            {
+                return BadRequest($"invalid background colour provided - ${backgroundColour}");
+            }
+
+            if (string.IsNullOrEmpty(imageFileType) || !Enum.TryParse(imageFileType, out FileType imageFileTypeEnum))
+            {
+                return BadRequest($"invalid image file type provided - ${imageFileType}");
+            }
+
+
+
+            return NoContent();
+        }
     }
 }
