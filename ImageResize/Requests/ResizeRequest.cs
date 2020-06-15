@@ -1,9 +1,10 @@
-﻿using ImageResize.Enums;
+﻿using System.IO;
+using ImageResize.Enums;
 using MediatR;
 
 namespace ImageResize.Requests
 {
-    public class ResizeRequest : IRequest<string>
+    public class ResizeRequest : IRequest<FileStream>
     {
         public ResizeRequest(Resolution resolution, BackgroundColour backgroundColour, string watermark, FileType fileType)
         {

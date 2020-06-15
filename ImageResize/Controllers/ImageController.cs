@@ -7,6 +7,7 @@ using ImageResize.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Extensions;
 
 namespace ImageResize.Controllers
 {
@@ -26,12 +27,12 @@ namespace ImageResize.Controllers
         [Route("{controller}/resize")]
         public async Task<IActionResult> Get(string resolution, string backgroundColour, string watermark, string imageFileType)
         {
-            if(string.IsNullOrEmpty(resolution) || !Enum.TryParse(resolution, out Resolution resolutionEnum))
+            if (string.IsNullOrEmpty(resolution) || !Enum.TryParse(resolution, out Resolution resolutionEnum))
             {
                 return BadRequest($"invalid resolution provided - ${resolution}");
             }
 
-            if(!Enum.TryParse(backgroundColour, out BackgroundColour backgroundColourEnum))
+            if (!Enum.TryParse(backgroundColour, out BackgroundColour backgroundColourEnum))
             {
                 return BadRequest($"invalid background colour provided - ${backgroundColour}");
             }
@@ -46,20 +47,12 @@ namespace ImageResize.Controllers
                 return BadRequest($"invalid image file type provided - ${imageFileType}");
             }
 
-            try
-            {
-                var resizedImage =
+            var resizedImage =
                     await _mediator.Send(new ResizeRequest(resolutionEnum, backgroundColourEnum, watermark,
                         imageFileTypeEnum));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            
 
-            return NoContent();
+
+            return File(resizedImage, $"image/{imageFileTypeEnum.GetDisplayName()}");
         }
     }
 }

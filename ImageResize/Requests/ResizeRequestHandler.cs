@@ -1,14 +1,18 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
 namespace ImageResize.Requests
 {
-    public class ResizeRequestHandler : IRequestHandler<ResizeRequest, string>
+    public class ResizeRequestHandler : IRequestHandler<ResizeRequest, FileStream>
     {
-        public Task<string> Handle(ResizeRequest request, CancellationToken cancellationToken)
+        public Task<FileStream> Handle(ResizeRequest request, CancellationToken cancellationToken)
         {
-            return Task.FromResult("yes");
+            var image = File.OpenRead(
+                "G:\\code\\ImageReSize\\ImageResize\\ImageResize\\Images\\01_04_2019_001103.png");
+
+            return Task.FromResult(image);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -20,9 +21,17 @@ namespace ImageResizeIIntegrationTests.Image
         [Fact]
         public async Task GivenNoParametersMissingWhenImageRequestedThenReturnNoContent()
         {
+            // Arrange
+            var folderPath = "C:\\downloads";
+            var filename = "test.png";
+
+            if(File.Exists($"{folderPath}\\{filename}"))
+            {
+                File.Delete($"{folderPath}\\{filename}");
+            }
 
             // Act
-            var result = await url
+            await url
                 .SetQueryParams(new
                 {
                     resolution = "X1080",
@@ -30,11 +39,10 @@ namespace ImageResizeIIntegrationTests.Image
                     watermark = "Dan",
                     imageFileType = "Png"
                 })
-                .GetAsync();
+                .DownloadFileAsync(folderPath, filename);
 
-            // Assert 
-            Assert.True(result.IsSuccessStatusCode);
-            Assert.Equal(HttpStatusCode.NoContent, result.StatusCode);
+            // Assert
+            Assert.True(File.Exists($"{folderPath}\\{filename}"));
         }
 
         [Fact(Skip = "Ignored")]
