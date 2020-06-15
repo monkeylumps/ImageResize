@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using ImageResize.Enums;
 using ImageResize.Requests;
@@ -52,7 +51,7 @@ namespace ImageResize.Controllers
                         imageFileTypeEnum));
 
 
-            return File(resizedImage, $"image/{imageFileTypeEnum.GetDisplayName()}");
+            return File(resizedImage, $"image/{imageFileTypeEnum.GetAttributeOfType<DescriptionAttribute>().Description}");
         }
     }
 }

@@ -9,16 +9,16 @@ namespace ImageResizeIIntegrationTests.Image
 {
     public class ImageTests
     {
-        private string baseUrl = "https://localhost:44314";
-        private string url;
+        private const string BaseUrl = "https://localhost:44314";
+        private readonly string _url;
 
         public ImageTests()
         {
             // Arrange
-            url = $"{baseUrl}/image/resize";
+            _url = $"{BaseUrl}/image/resize";
         }
 
-        [Fact]
+        [Fact(Skip = "Ignored")]
         public async Task GivenNoParametersMissingWhenImageRequestedThenReturnNoContent()
         {
             // Arrange
@@ -31,12 +31,12 @@ namespace ImageResizeIIntegrationTests.Image
             }
 
             // Act
-            await url
+            await _url
                 .SetQueryParams(new
                 {
                     resolution = "X1080",
                     backgroundColour = "Black",
-                    watermark = "Dan",
+                    watermark = "test",
                     imageFileType = "Png"
                 })
                 .DownloadFileAsync(folderPath, filename);
@@ -46,11 +46,10 @@ namespace ImageResizeIIntegrationTests.Image
         }
 
         [Fact(Skip = "Ignored")]
-        //[Fact]
         public async Task GivenResolutionMissingWhenImageRequestedThenReturn400()
         {
             // Act
-            var result = await url
+            var result = await _url
                 .AllowAnyHttpStatus()
                 .SetQueryParams(new
                 {
@@ -66,11 +65,10 @@ namespace ImageResizeIIntegrationTests.Image
         }
 
         [Fact(Skip = "Ignored")]
-        //[Fact]
         public async Task GivenInvalidResolutionWhenImageRequestedThenReturn400()
         {
             // Act
-            var result = await url
+            var result = await _url
                 .AllowAnyHttpStatus()
                 .SetQueryParams(new
                 {
@@ -87,11 +85,10 @@ namespace ImageResizeIIntegrationTests.Image
         }
 
         [Fact(Skip = "Ignored")]
-        //[Fact]
         public async Task GivenInvalidBackGroundColourWhenImageRequestedThenReturn400()
         {
             // Act
-            var result = await url
+            var result = await _url
                 .AllowAnyHttpStatus()
                 .SetQueryParams(new
                 {
@@ -108,11 +105,10 @@ namespace ImageResizeIIntegrationTests.Image
         }
 
         [Fact(Skip = "Ignored")]
-        //[Fact]
         public async Task GivenImageFileTypeMissingWhenImageRequestedThenReturn400()
         {
             // Act
-            var result = await url
+            var result = await _url
                 .AllowAnyHttpStatus()
                 .SetQueryParams(new
                 {
@@ -128,11 +124,10 @@ namespace ImageResizeIIntegrationTests.Image
         }
 
         [Fact(Skip = "Ignored")]
-        //[Fact]
         public async Task GivenInvalidImageFileTypeWhenImageRequestedThenReturn400()
         {
             // Act
-            var result = await url
+            var result = await _url
                 .AllowAnyHttpStatus()
                 .SetQueryParams(new
                 {

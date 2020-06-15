@@ -1,6 +1,8 @@
+using ImageResize.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +32,11 @@ namespace ImageResize
             services.AddMediatR(typeof(Startup));
 
             services.AddOptions();
+
+            services.AddSingleton<IImageService, ImageService>();
+            services.AddSingleton<IDistributedCache, MemoryDistributedCache>();
+            services.AddSingleton<IImageProcessService, ImageProcessService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

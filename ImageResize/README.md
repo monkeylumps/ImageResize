@@ -20,7 +20,7 @@ The system should be designed with scalability in mind.  While you have been pro
 
 ## Limitations
 
-In this coding challenge I will store cached images in memory and a single image on the file system. =
+In this coding challenge I will store cached images in memory and a single image on the file system.
 
 In production code the IDistributedCache will be replaced with a implementation that uses Redis, SqlServer or another distributed catching technology. 
 The single file would also be replaced with a lookup and retrieval from persistence storage such as Azure blob or Sql.
