@@ -3,23 +3,27 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using ImageResize.Enums;
+using ImageResize.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ImageResize.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class ImageController : ControllerBase
     {
         private readonly ILogger<ImageController> _logger;
+        private IMediator _mediator;
 
-        public ImageController(ILogger<ImageController> logger)
+        public ImageController(ILogger<ImageController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet]
+        [Route("{controller}/resize")]
         public async Task<IActionResult> Get(string resolution, string backgroundColour, string watermark, string imageFileType)
         {
             if(string.IsNullOrEmpty(resolution) || !Enum.TryParse(resolution, out Resolution resolutionEnum))
@@ -27,9 +31,14 @@ namespace ImageResize.Controllers
                 return BadRequest($"invalid resolution provided - ${resolution}");
             }
 
-            if(!string.IsNullOrEmpty(backgroundColour) && !Enum.TryParse(backgroundColour, out BackgroundColour backgroundColourEnum))
+            if(!Enum.TryParse(backgroundColour, out BackgroundColour backgroundColourEnum))
             {
                 return BadRequest($"invalid background colour provided - ${backgroundColour}");
+            }
+
+            if (string.IsNullOrEmpty(backgroundColour))
+            {
+                backgroundColourEnum = BackgroundColour.None;
             }
 
             if (string.IsNullOrEmpty(imageFileType) || !Enum.TryParse(imageFileType, out FileType imageFileTypeEnum))
@@ -37,7 +46,18 @@ namespace ImageResize.Controllers
                 return BadRequest($"invalid image file type provided - ${imageFileType}");
             }
 
-
+            try
+            {
+                var resizedImage =
+                    await _mediator.Send(new ResizeRequest(resolutionEnum, backgroundColourEnum, watermark,
+                        imageFileTypeEnum));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
 
             return NoContent();
         }
