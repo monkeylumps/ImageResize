@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ImageResize.Requests
 {
-    public class ResizeRequest : IRequest, IRequest<string>
+    public class ResizeRequest : IRequest<string>
     {
         public ResizeRequest(Resolution resolution, BackgroundColour backgroundColour, string watermark, FileType fileType)
         {

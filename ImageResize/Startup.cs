@@ -1,7 +1,3 @@
-using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using ImageResize.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,7 +16,6 @@ namespace ImageResize
         }
 
         public IConfiguration Configuration { get; }
-        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,30 +32,9 @@ namespace ImageResize
             services.AddOptions();
         }
 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder
-                .RegisterType<Mediator>()
-                .As<IMediator>()
-                .InstancePerLifetimeScope();
-
-            // request & notification handlers
-            builder.Register<ServiceFactory>(context =>
-            {
-                var c = context.Resolve<IComponentContext>();
-                return t => c.Resolve(t);
-            });
-
-            builder.RegisterAssemblyTypes(typeof(ResizeRequestHandler).GetTypeInfo().Assembly).AsImplementedInterfaces();
-            //builder.RegisterInstance(new ResizeRequestHandler())
-            //    .As<IRequestHandler<ResizeRequest, string>>();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(x =>
