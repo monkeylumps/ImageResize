@@ -14,7 +14,7 @@ namespace ImageResizeIIntegrationTests.Image
         public ImageTests()
         {
             // Arrange
-            url = $"{baseUrl}/image";
+            url = $"{baseUrl}/image/resize";
         }
 
         [Fact]

@@ -7,6 +7,7 @@ namespace ImageResize.Enums
         [Description("#FF0000")]
         Red,
         [Description("#000000")]
-        Black
+        Black,
+        None
     }
 }
